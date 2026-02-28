@@ -1,0 +1,63 @@
+{
+  "evidence_types": [
+    {
+      "id": "outer_boundary",
+      "name": "Footprint Boundary",
+      "description": "The complete outer contour of the footprint impression or fragment. This defines the extent of the footprint.",
+      "forensic_value": "Size estimation, scene reconstruction, overlap detection, footprint dimensions",
+      "annotation_guidance": "Trace the outermost visible edge of the footprint. For fragmented prints (like Images 2-5), annotate each major fragment's boundary separately.",
+      "color": "#FF0000"
+    },
+    {
+      "id": "pattern_region",
+      "name": "Visible Pattern Region",
+      "description": "Any area showing clear, identifiable tread or sole pattern. This includes ridges, grooves, blocks, circles, waves, or any distinct repeating structure.",
+      "forensic_value": "Shoe brand/model identification, pattern matching across views, class characteristics",
+      "annotation_guidance": "Mark regions where pattern details are clearly distinguishable. Include all pattern types: rectangular blocks (Image 1), wavy lines (Image 6), circular elements (Image 5), horizontal ridges (Images 2-4). Each distinct pattern region can be a separate annotation.",
+      "color": "#00FF00"
+    },
+    {
+      "id": "unclear_region",
+      "name": "Ambiguous/Low Quality Region",
+      "description": "Areas where the footprint is present but pattern details are unclear, very faded, or you cannot confidently classify them. This includes edge artifacts, wear that obscures pattern, low-contrast areas, and regions where you're genuinely uncertain.",
+      "forensic_value": "Uncertainty quantification, model abstention testing (RQ5), quality assessment",
+      "annotation_guidance": "Mark regions where you're unsure what the pattern is, where the print is too faded to see details, or where quality is too low for confident analysis. Being honest about uncertainty is important for testing model calibration!",
+      "color": "#808080"
+    }
+  ],
+  "hypotheses": [
+    "shoe_identification",
+    "footprint_size_estimation",
+    "multi_view_consistency",
+    "pattern_matching",
+    "fragment_reconstruction"
+  ],
+  "annotation_rules": {
+    "min_mask_area_pixels": 100,
+    "allow_overlapping_types": false,
+    "require_confidence_score": true,
+    "confidence_range": [0.0, 1.0],
+    "handle_fragments": "Annotate each major fragment separately with its own boundary",
+    "handle_orientations": "Annotate regardless of rotation - models should be rotation-invariant",
+    "pattern_vs_unclear": "If you can see ANY pattern detail, mark as pattern_region. Only use unclear_region when truly ambiguous."
+  },
+  "dataset_characteristics": {
+    "total_evidence_types": 3,
+    "has_complete_prints": true,
+    "has_fragmented_prints": true,
+    "has_multiple_orientations": true,
+    "pattern_types": [
+      "rectangular_blocks",
+      "grooves_ridges", 
+      "circular_oval",
+      "wavy_zigzag"
+    ],
+    "quality_range": "high (Image 6) to low (Image 5 edges)"
+  },
+  "annotation_workflow": {
+    "step_1": "Identify outer_boundary first (always present)",
+    "step_2": "Find all pattern_region areas (may be multiple per footprint)",
+    "step_3": "Mark unclear_region only where genuinely uncertain",
+    "expected_annotations_per_footprint": "3-5 total masks"
+  }
+}
