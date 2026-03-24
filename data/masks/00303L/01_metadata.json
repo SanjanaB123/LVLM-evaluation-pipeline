@@ -1,0 +1,15 @@
+{
+  "case_id": "00303L",
+  "view_id": "01",
+  "num_masks": 103,
+  "image_shape": [
+    4563,
+    2083,
+    3
+  ],
+  "evidence_types_available": [
+    "outer_boundary",
+    "pattern_region",
+    "unclear_region"
+  ]
+}

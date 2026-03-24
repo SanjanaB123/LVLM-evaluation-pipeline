@@ -1,0 +1,72 @@
+[
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 79,
+    "evidence_type": "outer_boundary",
+    "confidence": 0.9,
+    "reasoning": "Largest mask (area: 7392761px, score: 0.98)",
+    "review_status": "accepted",
+    "original_type": "outer_boundary"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 51,
+    "evidence_type": "pattern_region",
+    "confidence": 0.75,
+    "reasoning": "Pattern area (area: 1157789px, score: 0.96, rank: 2)",
+    "review_status": "accepted",
+    "original_type": "pattern_region"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 55,
+    "evidence_type": "pattern_region",
+    "confidence": 0.75,
+    "reasoning": "Pattern area (area: 525857px, score: 0.95, rank: 3)",
+    "review_status": "accepted",
+    "original_type": "pattern_region"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 78,
+    "evidence_type": "pattern_region",
+    "confidence": 0.75,
+    "reasoning": "Pattern area (area: 399471px, score: 0.95, rank: 4)",
+    "review_status": "accepted",
+    "original_type": "pattern_region"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 80,
+    "evidence_type": "pattern_region",
+    "confidence": 0.75,
+    "reasoning": "Pattern area (area: 302570px, score: 0.96, rank: 5)",
+    "review_status": "accepted",
+    "original_type": "pattern_region"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 26,
+    "evidence_type": "unclear_region",
+    "confidence": 0.5,
+    "reasoning": "Low-rank mask (rank: 62)",
+    "review_status": "accepted",
+    "original_type": "unclear_region"
+  },
+  {
+    "case_id": "00301L",
+    "view_id": "04",
+    "mask_idx": 57,
+    "evidence_type": "unclear_region",
+    "confidence": 0.5,
+    "reasoning": "Low-rank mask (rank: 63)",
+    "review_status": "accepted",
+    "original_type": "unclear_region"
+  }
+]
