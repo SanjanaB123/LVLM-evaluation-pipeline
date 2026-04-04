@@ -4,6 +4,7 @@ A pipeline for evaluating Vision-Language Models (VLMs) on forensic footprint im
 
 ## Dataset
 
+- **Source:** [CSAFE 2D Footwear Outsole Study](https://data.csafe.iastate.edu/2DFootwearOutsoleStudy/)
 - **300 forensic footprint cases** (left/right variants, 5 views each)
 - **90 cases manually annotated** using SAM-assisted ground truth creation
 - Three evidence types per the annotation schema:
