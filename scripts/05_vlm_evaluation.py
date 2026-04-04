@@ -29,7 +29,7 @@ OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY")
 MODEL           = "gpt-4o"
 BENCHMARK_PATH  = Path("data/benchmark_v1.json")
 OUTPUT_DIR      = Path("data/vlm_results")
-MAX_TOKENS      = 1500      # bumped slightly for verifier JSON
+MAX_TOKENS      = 1500
 TEMPERATURE     = 0.2
 RETRY_ATTEMPTS  = 3
 RETRY_DELAY     = 10
@@ -72,13 +72,16 @@ Analyze this shoe print image carefully and respond in JSON format with these EX
 }}
 
 CRITICAL RULES:
-- "evidence_types_found" MUST contain only values from this exact list: {VALID_LABELS_STR}
-  Do NOT use any other strings. Use "outer_boundary" for the print outline,
-  "pattern_region" for tread/pattern areas, "unclear_region" for ambiguous areas.
+- "evidence_types_found" should describe what you actually see using your own words.
+  Do not force labels — if something doesn't fit a category, describe it naturally.
 - Only describe what you can actually see in the image.
 - If you are unsure, set abstain to true rather than guessing.
 - Do not invent evidence that is not visually present.
 - Confidence scores must reflect actual certainty (do not always return 0.9).
+- Pay close attention to smudged, partial, or ambiguous areas. If ANY region
+  is unclear, degraded, smudged, or only partially visible, you MUST include
+  "unclear_region" in evidence_types_found and describe it in unclear_regions.
+  Do not skip this even if the unclear area is small.
 - Return ONLY valid JSON, no extra text, no markdown fences."""
 
 REASONER_MULTI_PROMPT = f"""You are a shoe print analyst examining multiple views of the same impression for academic research.
@@ -125,9 +128,8 @@ You are given {{n_views}} views of the same shoe print. Analyze ALL views togeth
 }}}}
 
 CRITICAL RULES:
-- "evidence_types_found" MUST contain only values from this exact list: {VALID_LABELS_STR}
-  Do NOT use any other strings. Use "outer_boundary" for the print outline,
-  "pattern_region" for tread/pattern areas, "unclear_region" for ambiguous areas.
+- "evidence_types_found" should describe what you actually see using your own words.
+  Do not force labels — if something doesn't fit a category, describe it naturally.
 - Compare features across views explicitly.
 - Note which evidence appears in multiple views vs only one.
 - Do not invent evidence not visually present in any view.
@@ -181,11 +183,11 @@ def encode_image_b64(path: str) -> str:
 def build_image_messages(image_paths: list[str], is_multiview: bool = False) -> list[dict]:
     """Build vision content blocks for single-view (1 image, high detail) or multi-view (all images, low detail)."""
     if is_multiview:
-        paths_to_use = image_paths          # all views
+        paths_to_use = image_paths
         detail       = "low"
         log.info("Multi-view: sending all %d views at detail=low", len(paths_to_use))
     else:
-        paths_to_use = image_paths[:1]      # only first view needed
+        paths_to_use = image_paths[:1]
         detail       = "high"
         log.info("Single-view: sending 1 of %d views at detail=high", len(image_paths))
 
@@ -236,26 +238,74 @@ def parse_json_response(raw: str) -> dict:
 
 
 LABEL_MAP = {
-    "boundary":            "outer_boundary",
-    "outer boundary":      "outer_boundary",
-    "print boundary":      "outer_boundary",
-    "footprint boundary":  "outer_boundary",
-    "shoe print boundary": "outer_boundary",
-    "outline":             "outer_boundary",
-    "print outline":       "outer_boundary",
-    "pattern":             "pattern_region",
-    "tread pattern":       "pattern_region",
-    "tread":               "pattern_region",
-    "pattern area":        "pattern_region",
-    "print pattern":       "pattern_region",
-    "heel":                "pattern_region",
-    "toe":                 "pattern_region",
-    "sole pattern":        "pattern_region",
-    "unclear":             "unclear_region",
-    "ambiguous":           "unclear_region",
-    "uncertain region":    "unclear_region",
-    "smudge":              "unclear_region",
-    "degraded area":       "unclear_region",
+    "boundary":                    "outer_boundary",
+    "outer boundary":              "outer_boundary",
+    "outer_boundary":              "outer_boundary",
+    "print boundary":              "outer_boundary",
+    "footprint boundary":          "outer_boundary",
+    "shoe print boundary":         "outer_boundary",
+    "outline":                     "outer_boundary",
+    "print outline":               "outer_boundary",
+    "consistent outer boundary":   "outer_boundary",
+    "outer sole":                  "outer_boundary",
+    "sole outline":                "outer_boundary",
+    "shoe outline":                "outer_boundary",
+    "tread boundary":              "outer_boundary",
+
+    "pattern":                     "pattern_region",
+    "pattern_region":              "pattern_region",
+    "pattern_regions":             "pattern_region",
+    "clear pattern":               "pattern_region",
+    "clear_pattern":               "pattern_region",
+    "clear pattern regions":       "pattern_region",
+    "clear patterns":              "pattern_region",
+    "tread":                       "pattern_region",
+    "tread pattern":               "pattern_region",
+    "tread patterns":              "pattern_region",
+    "patterned regions":           "pattern_region",
+    "patterned sole impression":   "pattern_region",
+    "patterned tread marks":       "pattern_region",
+    "partial impression":          "pattern_region",
+    "grid pattern":                "pattern_region",
+    "grid-like pattern":           "pattern_region",
+    "grid-like structure":         "pattern_region",
+    "grid":                        "pattern_region",
+    "hexagonal pattern":           "pattern_region",
+    "honeycomb pattern":           "pattern_region",
+    "circular pattern":            "pattern_region",
+    "circular patterns":           "pattern_region",
+    "linear elements":             "pattern_region",
+    "linear patterns":             "pattern_region",
+    "linear grooves":              "pattern_region",
+    "block patterns":              "pattern_region",
+    "block shapes":                "pattern_region",
+    "blocky shapes":               "pattern_region",
+    "rectangular patterns":        "pattern_region",
+    "rectangular blocks":          "pattern_region",
+    "triangular shapes":           "pattern_region",
+    "geometric shapes":            "pattern_region",
+    "geometric patterns":          "pattern_region",
+    "curved line patterns":        "pattern_region",
+    "wave-like pattern":           "pattern_region",
+    "wavy design elements":        "pattern_region",
+    "distinctive shapes":          "pattern_region",
+    "tread marks":                 "pattern_region",
+    "zigzag lines":                "pattern_region",
+    "zigzag patterns":             "pattern_region",
+    "textured regions":            "pattern_region",
+    "textured areas":              "pattern_region",
+    "cross-hatch pattern":         "pattern_region",
+    "repeated oval patterns":      "pattern_region",
+    "sole pattern":                "pattern_region",
+
+    "unclear":                     "unclear_region",
+    "unclear region":              "unclear_region",
+    "unclear regions":             "unclear_region",
+    "unclear_region":              "unclear_region",
+    "unclear_regions":             "unclear_region",
+    "ambiguous":                   "unclear_region",
+    "degraded area":               "unclear_region",
+    "worn areas":                  "unclear_region",
 }
 
 def normalise_labels(labels: list[str]) -> list[str]:
@@ -269,7 +319,7 @@ def normalise_labels(labels: list[str]) -> list[str]:
             normalised.append(LABEL_MAP[lbl_lower])
         else:
             log.debug("Unknown label dropped during normalisation: %r", lbl)
-    # deduplicate while preserving order
+
     seen = set()
     return [x for x in normalised if not (x in seen or seen.add(x))]
 
@@ -380,7 +430,7 @@ def compute_hallucination_score(verifier_output: dict) -> dict:
         "n_hallucinations":   len(hallucinations),
         "n_overclaiming":     len(overclaiming),
         "verdict":            verdict,
-        "hallucination_rate": 1.0 if len(hallucinations) > 0 else 0.0,
+        "hallucination_rate": 1.0 if (len(hallucinations) > 0 or len(overclaiming) > 0) else 0.0,
     }
 
 
@@ -433,11 +483,17 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
             "timestamp":     datetime.now().isoformat() + "Z",
         }
 
+    if not is_multiview and len(image_paths) > 1:
+        verifier_image_paths = image_paths[1:2]
+        log.info("Verifier using view 2 (independent from reasoner's view 1)")
+    else:
+        verifier_image_paths = image_paths
+
     verifier_system = VERIFIER_PROMPT.format(
         reasoner_response=json.dumps(reasoner_output, indent=2)
     )
     verifier_output = call_openai(
-        client, verifier_system, image_paths,
+        client, verifier_system, verifier_image_paths,
         dry_run=dry_run,
         is_multiview=is_multiview,
     )
@@ -511,7 +567,6 @@ def aggregate_results(results: list[dict]) -> dict:
     skip_reasons: dict[str, int] = {}
     for r in skipped:
         reason = r.get("skip_reason", "unknown")
-        # Bucket into readable categories
         if "refusal" in reason.lower() or "can't assist" in reason.lower():
             key = "content_policy_refusal"
         elif "image not found" in reason.lower():
@@ -583,7 +638,6 @@ def main(split: str = "all", dry_run: bool = False) -> None:
     items = benchmark["items"]
     if split != "all":
         items = [i for i in items if i["split"] == split]
-
     log.info(
         "Evaluating %d items (split=%s, model=%s)",
         len(items), split, MODEL

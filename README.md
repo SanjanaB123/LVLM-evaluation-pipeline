@@ -50,38 +50,47 @@ This two-call design separates generation from verification, enabling fine-grain
 
 ## Results
 
-> **TODO:** Add results after evaluation runs.
+Test split (56 items, 14 cases, GPT-4o). 0 items skipped.
 
 ### Grounding Performance (RQ3)
 
 | Evidence Type | Precision | Recall | F1 |
 |---------------|-----------|--------|----|
-| `outer_boundary` | — | — | — |
-| `pattern_region` | — | — | — |
-| `unclear_region` | — | — | — |
+| `outer_boundary` | 0.609 | 0.525 | 0.564 |
+| `pattern_region` | 0.880 | 0.946 | 0.912 |
+| `unclear_region` | 1.000 | 0.732 | 0.845 |
+| **Overall** | **0.830** | **0.734** | **0.774** |
 
 ### Hallucination & Verification (RQ4)
 
 | Metric | Value |
 |--------|-------|
-| Hallucination Rate | — |
-| Overclaiming Rate | — |
-| Verifier Agreement | — |
+| Hallucination Rate | 3.6% (2/56 items) |
+| Overclaiming Rate | 1.8% (1/56 items) |
+| Verifier Verdict | 55/56 supported |
 
 ### Multi-View vs Single-View (RQ2)
 
-| Condition | F1 | Improvement |
-|-----------|----|----|
-| Single-view | — | — |
-| Multi-view | — | — |
+| Condition | Items | Avg F1 |
+|-----------|-------|--------|
+| Single-view | 42 | 0.788 |
+| Multi-view | 14 | 0.564 |
+| Delta | — | -0.224 |
 
 ### Uncertainty Calibration (RQ5)
 
 | Metric | Value |
 |--------|-------|
-| Abstention Rate | — |
-| Avg. Confidence (correct) | — |
-| Avg. Confidence (incorrect) | — |
+| Abstention Rate | 0.0% |
+| Avg. Confidence (F1 = 1.0) | 0.800 |
+| Avg. Confidence (F1 < 1.0) | 0.820 |
+
+### Key Findings
+
+- **High precision, moderate recall.** Precision is strong across all types (overall 0.830), but recall lags behind (overall 0.734). `outer_boundary` is the weakest (P=0.609, R=0.525, F1=0.564), dragging overall F1 to 0.774.
+- **Multi-view hurts.** Multi-view items score 22.4% lower F1 than single-view, likely because images are sent at `detail="low"` to manage token cost, losing subtle boundary and degradation cues.
+- **Unclear regions underdetected.** `unclear_region` has perfect precision but recall of 0.732 — the model misses degraded/ambiguous areas in roughly 1 in 4 items.
+- **Weak confidence calibration.** The model is slightly more confident on incorrect predictions (0.82) than correct ones (0.80), and never abstains.
 
 ## Repository Structure
 
@@ -96,6 +105,8 @@ This two-call design separates generation from verification, enabling fine-grain
 │   ├── visualizations/             # Mask overlay visualizations
 │   ├── benchmark_v1.json           # Evaluation benchmark
 │   └── case_splits.json            # Train/val/test splits
+├── vlm_results/
+│   └── results.json                # GPT-4o evaluation results (test split)
 ├── scripts/
 │   ├── 01_generate_sam_masks.py
 │   ├── 02_preannotation.py
