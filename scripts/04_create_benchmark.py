@@ -195,7 +195,7 @@ def main():
     with open(out_path, "w") as f:
         json.dump(benchmark, f, indent=2)
 
-    print(f"\n✅ Saved to {out_path}")
+    print(f"\nSaved to {out_path}")
     print("=" * 60)
 
 if __name__ == "__main__":

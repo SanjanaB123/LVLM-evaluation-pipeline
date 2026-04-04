@@ -1,19 +1,7 @@
 """
 05_vlm_evaluation.py
 OpenAI GPT-4o evaluation pipeline for forensic footprint reasoning.
-Addresses RQ1-RQ6 via a two-call Reasoner → Verifier loop.
-
-Fixes applied:
-  1. Prompt reframing to avoid GPT-4o content policy refusals
-  2. Constrained output vocabulary to match gold label strings exactly
-  3. Graceful error handling — failed items are skipped, not silently zeroed
-  4. Max 3 images per call to reduce refusal rate
-  5. Error summary reported at end
-
-Usage:
-    python 05_vlm_evaluation.py                   # runs all benchmark items
-    python 05_vlm_evaluation.py --split test      # test split only
-    python 05_vlm_evaluation.py --dry-run         # no API calls
+Addresses RQ1-RQ6 via a two-call Reasoner -> Verifier loop.
 """
 
 from __future__ import annotations
@@ -30,7 +18,6 @@ from datetime import datetime
 
 from openai import OpenAI
 
-# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)-8s  %(message)s",
@@ -38,7 +25,6 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# ── Config ────────────────────────────────────────────────────────────────────
 OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY")
 MODEL           = "gpt-4o"
 BENCHMARK_PATH  = Path("data/benchmark_v1.json")
@@ -47,16 +33,9 @@ MAX_TOKENS      = 1500      # bumped slightly for verifier JSON
 TEMPERATURE     = 0.2
 RETRY_ATTEMPTS  = 3
 RETRY_DELAY     = 10
-# Single-view prompts only ever need 1 image.
-# Multi-view prompts get ALL images, but at lower detail to manage token load.
 
-# ── VALID LABEL SET — must match gold labels exactly ─────────────────────────
 VALID_EVIDENCE_TYPES = ["outer_boundary", "pattern_region", "unclear_region"]
 VALID_LABELS_STR     = '["outer_boundary", "pattern_region", "unclear_region"]'
-
-# ── Prompts ───────────────────────────────────────────────────────────────────
-# FIX 1: Reframed away from "forensic" language that triggers content moderation.
-# FIX 2: evidence_types_found is now constrained to the exact gold label strings.
 
 REASONER_SINGLE_PROMPT = f"""You are a shoe print analyst examining impression evidence for academic research.
 
@@ -194,21 +173,13 @@ Review the image(s) and verify this analysis. Respond in JSON:
 IMPORTANT: Return ONLY valid JSON, no extra text, no markdown fences."""
 
 
-# ── Image loading ─────────────────────────────────────────────────────────────
 def encode_image_b64(path: str) -> str:
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
 
 
 def build_image_messages(image_paths: list[str], is_multiview: bool = False) -> list[dict]:
-    """
-    Build vision content blocks.
-    - Single-view prompts: send only the first image at high detail.
-      (The other views are redundant — the prompt doesn't use them.)
-    - Multi-view prompts: send ALL images at low detail so no view is dropped.
-      Lower detail still preserves shape/texture for cross-view reasoning
-      while keeping token count manageable and reducing refusal risk.
-    """
+    """Build vision content blocks for single-view (1 image, high detail) or multi-view (all images, low detail)."""
     if is_multiview:
         paths_to_use = image_paths          # all views
         detail       = "low"
@@ -234,7 +205,6 @@ def build_image_messages(image_paths: list[str], is_multiview: bool = False) -> 
     return blocks
 
 
-# ── JSON parsing ──────────────────────────────────────────────────────────────
 def parse_json_response(raw: str) -> dict:
     content = re.sub(r"```(?:json)?\s*", "", raw).strip().replace("```", "").strip()
     start, end = content.find("{"), content.rfind("}") + 1
@@ -265,10 +235,7 @@ def parse_json_response(raw: str) -> dict:
     )
 
 
-# ── Label normalisation ───────────────────────────────────────────────────────
-# FIX 2 (safety net): If the model still uses non-standard labels, map them.
 LABEL_MAP = {
-    # outer boundary variants
     "boundary":            "outer_boundary",
     "outer boundary":      "outer_boundary",
     "print boundary":      "outer_boundary",
@@ -276,7 +243,6 @@ LABEL_MAP = {
     "shoe print boundary": "outer_boundary",
     "outline":             "outer_boundary",
     "print outline":       "outer_boundary",
-    # pattern region variants
     "pattern":             "pattern_region",
     "tread pattern":       "pattern_region",
     "tread":               "pattern_region",
@@ -285,7 +251,6 @@ LABEL_MAP = {
     "heel":                "pattern_region",
     "toe":                 "pattern_region",
     "sole pattern":        "pattern_region",
-    # unclear variants
     "unclear":             "unclear_region",
     "ambiguous":           "unclear_region",
     "uncertain region":    "unclear_region",
@@ -309,7 +274,6 @@ def normalise_labels(labels: list[str]) -> list[str]:
     return [x for x in normalised if not (x in seen or seen.add(x))]
 
 
-# ── API call ──────────────────────────────────────────────────────────────────
 def call_openai(
     client:        OpenAI,
     system_prompt: str,
@@ -357,7 +321,6 @@ def call_openai(
             )
             raw = response.choices[0].message.content.strip()
 
-            # FIX 3: Detect refusal before trying to parse JSON
             refusal_phrases = [
                 "i'm sorry, i can't",
                 "i'm unable to assist",
@@ -387,10 +350,9 @@ def call_openai(
     return {"error": last_error or "unknown error"}
 
 
-# ── Evaluation metrics ────────────────────────────────────────────────────────
 def compute_grounding_score(reasoner_output: dict, gold_evidence_types: list[str]) -> dict:
     raw_predicted = reasoner_output.get("evidence_types_found", [])
-    predicted = set(normalise_labels(raw_predicted))   # FIX 2 applied here
+    predicted = set(normalise_labels(raw_predicted))
     gold      = set(gold_evidence_types)
     tp = len(predicted & gold)
     fp = len(predicted - gold)
@@ -401,7 +363,7 @@ def compute_grounding_score(reasoner_output: dict, gold_evidence_types: list[str
                  if (precision + recall) > 0 else 0.0)
     return {
         "predicted":       list(predicted),
-        "predicted_raw":   raw_predicted,    # keep original for debugging
+        "predicted_raw":   raw_predicted,
         "gold":            list(gold),
         "tp": tp, "fp": fp, "fn": fn,
         "precision": round(precision, 4),
@@ -432,7 +394,6 @@ def compute_uncertainty_score(reasoner_output: dict) -> dict:
     }
 
 
-# ── Per-item evaluation ───────────────────────────────────────────────────────
 def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
     case_id      = item["case_id"]
     prompt_type  = item["prompt_type"]
@@ -449,7 +410,6 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
         if is_multiview else REASONER_SINGLE_PROMPT
     )
 
-    # ── Reasoner call ─────────────────────────────────────────────────────────
     reasoner_output = call_openai(
         client, system_prompt, image_paths,
         extra_text=item["hypothesis_prompt"],
@@ -457,7 +417,6 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
         is_multiview=is_multiview,
     )
 
-    # FIX 3: Skip item if reasoner errored — don't let it silently score 0
     if "error" in reasoner_output:
         log.warning("Skipping item %s — reasoner error: %s",
                     item["benchmark_id"], reasoner_output["error"])
@@ -474,9 +433,6 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
             "timestamp":     datetime.now().isoformat() + "Z",
         }
 
-    # ── Verifier call ─────────────────────────────────────────────────────────
-    # Verifier always uses multi-view mode if this is a multi-view item
-    # so it sees the same images the reasoner saw.
     verifier_system = VERIFIER_PROMPT.format(
         reasoner_response=json.dumps(reasoner_output, indent=2)
     )
@@ -486,7 +442,6 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
         is_multiview=is_multiview,
     )
 
-    # FIX 3: Verifier failure is non-fatal — use an empty placeholder
     if "error" in verifier_output:
         log.warning("Verifier error for %s — continuing with empty verifier output",
                     item["benchmark_id"])
@@ -499,7 +454,6 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
             "verifier_error":          verifier_output["error"],
         }
 
-    # ── Metrics ───────────────────────────────────────────────────────────────
     grounding     = compute_grounding_score(reasoner_output, item["gold_evidence_types"])
     hallucination = compute_hallucination_score(verifier_output)
     uncertainty   = compute_uncertainty_score(reasoner_output)
@@ -524,9 +478,7 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
     }
 
 
-# ── Aggregate results ─────────────────────────────────────────────────────────
 def aggregate_results(results: list[dict]) -> dict:
-    # FIX 3: Only aggregate over items that were not skipped
     valid   = [r for r in results if not r.get("skipped", False)]
     skipped = [r for r in results if     r.get("skipped", False)]
 
@@ -556,7 +508,6 @@ def aggregate_results(results: list[dict]) -> dict:
     mv_f1 = mean([r["grounding_metrics"]["f1"] for r in mv_results])
     sv_f1 = mean([r["grounding_metrics"]["f1"] for r in sv_results])
 
-    # Summarise skip reasons for diagnostics
     skip_reasons: dict[str, int] = {}
     for r in skipped:
         reason = r.get("skip_reason", "unknown")
@@ -618,7 +569,6 @@ def aggregate_results(results: list[dict]) -> dict:
     }
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
 def main(split: str = "all", dry_run: bool = False) -> None:
     log.info("=== GPT-4o Forensic Footprint Evaluation ===")
 
