@@ -18,9 +18,9 @@
       "n_singleview_items": 42
     },
     "rq3_grounding": {
-      "avg_precision": 1.0,
-      "avg_recall": 0.6012,
-      "avg_f1": 0.7321
+      "avg_precision": 0.8297,
+      "avg_recall": 0.7343,
+      "avg_f1": 0.774
     },
     "rq4_hallucination": {
       "hallucination_rate": 0.0357,
