@@ -31,14 +31,61 @@ TIFF Images -> PNG Conversion -> SAM Masks -> Pre-Annotation -> Manual Review ->
 | 7. Stress Testing | `scripts/07_generate_stress_tests.py` | Generates degraded images (blur, noise, low contrast, crop, blank) for RQ5 uncertainty/abstention testing |
 | 8. Visualization | `scripts/06_visualize_results.py` | Generates publication-ready figures for all RQs |
 
+### SAM Mask Generation
+
+Masks are generated with SAM ViT-H using the following configuration:
+
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| `points_per_side` | 32 | Grid density for automatic prompt generation |
+| `pred_iou_thresh` | 0.86 | Filter masks by predicted IoU quality |
+| `stability_score_thresh` | 0.92 | Stability score filtering |
+| `min_mask_region_area` | 100 | Minimum object size in pixels |
+
+Output per view: `.npz` file containing boolean masks, stability scores, areas, and bounding boxes, plus a `metadata.json`.
+
+### Pre-Annotation Rules (v3)
+
+Masks are classified into evidence types using area-rank heuristics:
+
+- **Rank 0, score > 0.85** -> `outer_boundary` (max 1 per image, confidence 0.90)
+- **Score > 0.88, area 500-80% of largest, rank < 40** -> `pattern_region` (confidence 0.75)
+- **Score < 0.86 or area < 400px or rank > 60** -> `unclear_region` (confidence 0.50-0.60)
+
 ### Evaluation Architecture
 
-The VLM evaluation uses a **Reasoner-Verifier loop** with GPT-4o:
+The VLM evaluation uses a **Reasoner-Verifier loop** with GPT-4o (`temperature=0.2`, `max_tokens=1500`):
 
-1. **Reasoner (Call 1):** Receives footprint image(s) and a hypothesis prompt. Outputs structured JSON with evidence types found, confidence scores, and an abstention flag.
-2. **Verifier (Call 2):** Receives the Reasoner's claims and a different view of the same footprint. Flags hallucinated regions, overclaimed evidence, and missed findings. Outputs corrected evidence labels using canonical types.
+1. **Reasoner (Call 1):** Receives footprint image(s) at `detail=high` and a hypothesis prompt. Outputs structured JSON with evidence types found (free-text), confidence scores, and an abstention flag. Four prompt types: `footprint_analysis`, `pattern_identification`, `boundary_detection`, `multi_view_consistency`.
+2. **Verifier (Call 2):** Receives the Reasoner's claims and a **different view** of the same footprint (independent verification). Flags hallucinated regions, overclaimed evidence, and missed findings. Outputs corrected evidence labels using canonical types.
+3. **Dual Grounding Scoring:** Grounding is computed twice - once from the Reasoner's raw free-text labels (after normalization via a 60+ entry label map), and once from the Verifier's corrected canonical labels. The delta directly measures verifier impact (RQ6).
 
 This two-call design separates generation from verification, enabling both hallucination detection (RQ4) and direct measurement of verifier impact on grounding (RQ6).
+
+### Stress Testing (RQ5)
+
+To test uncertainty calibration, existing test images are degraded using 5 transformations:
+
+| Degradation | Method | Expected Behavior |
+|-------------|--------|-------------------|
+| `heavy_blur` | Gaussian blur, sigma=15 | Lower confidence, more `unclear_region` |
+| `low_contrast` | Contrast reduced to 10% | Should abstain - patterns not visible |
+| `heavy_noise` | Gaussian noise, std=80 | Should abstain - image too noisy |
+| `center_crop` | 15% center region only | Lower confidence, partial evidence |
+| `blank` | Uniform gray image | Must abstain - no forensic content |
+
+### Generated Figures
+
+| Figure | File | RQ | Description |
+|--------|------|----|-------------|
+| Fig 1 | `fig1_per_type_grounding.png` | RQ3+RQ6 | Side-by-side P/R/F1: Reasoner vs Verifier-corrected |
+| Fig 2 | `fig2_mv_vs_sv.png` | RQ2 | Single-view vs multi-view F1 by prompt type |
+| Fig 3 | `fig3_confusion_heatmap.png` | RQ3 | Per-type hit rate, miss rate, false positive rate |
+| Fig 4 | `fig4_calibration.png` | RQ5 | Reliability diagram: binned confidence vs actual F1 |
+| Fig 5 | `fig5_verdict_distribution.png` | RQ4 | Verifier verdict pie chart + bar chart |
+| Fig 6 | `fig6_hallucination_table.png` | RQ4 | Table of hallucinated/overclaimed items with corrections |
+| Fig 7 | `fig7_rq_summary_radar.png` | All | Radar chart with verifier F1 improvement delta |
+| Fig 8 | `fig8_stress_test_rq5.png` | RQ5 | 3-panel: confidence, abstention, F1 by degradation type |
 
 ## Research Questions
 
@@ -137,27 +184,55 @@ The verifier maintains perfect precision (1.0) but overcorrects, dropping recall
 
 ```
 ├── config/
-│   └── evidence_schema.json          # Evidence types + annotation rules
+│   └── evidence_schema.json              # Evidence types, annotation rules, color codes
 ├── data/
-│   ├── raw/                          # Raw TIFF images (sample: 00101L, 00101R)
-│   ├── masks/                        # SAM-generated masks (.npz + metadata)
-│   ├── suggestions/                  # Pre-annotation suggestions
-│   ├── annotations/                  # Reviewed annotations (ground truth)
-│   ├── visualizations/               # Mask overlay visualizations
-│   ├── benchmark_v1.json             # Evaluation benchmark (360 items)
-│   ├── case_splits.json              # Train/val/test splits
-│   └── stress_test/
-│       └── benchmark_stress.json     # Stress test benchmark for RQ5
+│   ├── raw/                              # Source images organized by case
+│   │   ├── 00101L/                       # Sample case: left shoe, 5 views
+│   │   │   ├── 01.png ... 05.png
+│   │   └── 00101R/                       # Sample case: right shoe, 5 views
+│   │       ├── 01.png ... 05.png
+│   ├── masks/                            # SAM-generated masks per case
+│   │   ├── 00101L/
+│   │   │   ├── 01_masks.npz             # Compressed boolean masks + scores + bboxes
+│   │   │   └── 01_metadata.json         # Mask count, image shape, evidence types
+│   │   └── 00101R/
+│   ├── suggestions/                      # Pre-annotation suggestions (JSON per view)
+│   │   ├── 00101L_01_suggestions.json
+│   │   └── ...
+│   ├── annotations/                      # Reviewed ground truth annotations
+│   │   ├── 00101L_01_annotations.json
+│   │   └── ...
+│   ├── visualizations/                   # Mask overlay images (red/green/yellow)
+│   │   ├── 00101L_02_viz.png
+│   │   └── ...
+│   ├── benchmark_v1.json                 # Evaluation benchmark (360 items, 4 prompt types)
+│   └── case_splits.json                  # Train(64)/Val(14)/Test(14) case assignments
+├── benchmark_stress.json                 # Stress test benchmark for RQ5 (5 degradation types)
 ├── scripts/
-│   ├── 01_generate_sam_masks.py      # SAM ViT-H mask generation
-│   ├── 02_preannotation.py           # Rules-based evidence classification
-│   ├── 03_review_suggestions.py      # Interactive annotation review CLI
-│   ├── 04_create_benchmark.py        # Benchmark assembly + case splits
-│   ├── 05_vlm_evaluation.py          # Reasoner-Verifier evaluation loop
-│   ├── 06_visualize_results.py       # Publication figure generation
-│   └── 07_generate_stress_tests.py   # Degraded image generator for RQ5
-├── data_preprocessing.ipynb          # TIFF to PNG conversion
-├── requirements.txt
+│   ├── 01_generate_sam_masks.py          # SAM ViT-H mask generation (points_per_side=32)
+│   ├── 02_preannotation.py              # Rules-based evidence classification (v3, strict)
+│   ├── 03_review_suggestions.py          # Interactive CLI review with visual overlays
+│   ├── 04_create_benchmark.py            # Benchmark assembly + case-level train/val/test splits
+│   ├── 05_vlm_evaluation.py             # Reasoner-Verifier loop, dual grounding scores
+│   ├── 06_visualize_results.py           # 8 publication figures (P/R/F1, calibration, radar, stress)
+│   └── 07_generate_stress_tests.py       # Degraded image generator (blur, noise, contrast, crop, blank)
+├── vlm_results/
+│   ├── results.json                      # GPT-4o test split results (56 items, 14 cases)
+│   └── abstention.json                   # Stress test results (25 items, 5 degradations)
+├── results/
+│   ├── figures/                          # Figures from clean test run
+│   │   ├── fig1_per_type_grounding.png   # RQ3+RQ6: Reasoner vs Verifier-corrected P/R/F1
+│   │   ├── fig2_mv_vs_sv.png            # RQ2: Single-view vs multi-view F1 by prompt type
+│   │   ├── fig3_confusion_heatmap.png    # RQ3: Evidence type detection breakdown
+│   │   ├── fig4_calibration.png          # RQ5: Confidence reliability diagram
+│   │   ├── fig5_verdict_distribution.png # RQ4: Verifier verdict distribution
+│   │   ├── fig6_hallucination_table.png  # RQ4: Hallucination detail table
+│   │   └── fig7_rq_summary_radar.png     # Overall performance radar chart
+│   └── figures_stress/
+│       └── fig8_stress_test_rq5.png      # RQ5: Confidence/abstention/F1 on degraded inputs
+├── references/                           # External reference papers
+├── data_preprocessing.ipynb              # TIFF to PNG conversion notebook
+├── requirements.txt                      # Python dependencies (50+ packages)
 └── README.md
 ```
 
@@ -198,9 +273,32 @@ python scripts/06_visualize_results.py --results data/vlm_results/abstention.jso
 ## Requirements
 
 - Python 3.8+
-- SAM checkpoint (ViT-H) for mask generation
-- OpenAI API key for VLM evaluation (GPT-4o)
+- SAM checkpoint (`sam_vit_h_4b8939.pth`) for mask generation
+- OpenAI API key (`OPENAI_API_KEY` environment variable) for GPT-4o evaluation
+- Key packages: `segment_anything`, `opencv-python`, `torch`, `openai`, `matplotlib`, `numpy`, `tqdm`, `json-repair`
 
 ```bash
 pip install -r requirements.txt
 ```
+
+## Benchmark Format
+
+Each benchmark item contains:
+
+```json
+{
+  "benchmark_id": "00201L_footprint_analysis",
+  "case_id": "00201L",
+  "split": "test",
+  "views": ["01", "02", "03", "04", "05"],
+  "hypothesis_prompt": "Identify and segment the forensic evidence...",
+  "prompt_type": "footprint_analysis",
+  "gold_evidence_types": ["outer_boundary", "pattern_region", "unclear_region"],
+  "gold_masks": { ... },
+  "ambiguity_flag": false,
+  "image_paths": ["data/processed/00201L/01.png", ...],
+  "mask_paths": ["data/masks/00201L/01_masks.npz", ...]
+}
+```
+
+Train/val/test splits are done at the **case level** (not image level) to prevent L/R leakage: left and right views of the same footprint always stay in the same split.
