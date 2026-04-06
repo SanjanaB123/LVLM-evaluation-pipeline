@@ -442,6 +442,150 @@ def fig7_rq_summary(results: list[dict], agg: dict, out_dir: Path) -> None:
     print("  Saved fig7_rq_summary_radar.png")
 
 
+# ── Figure 8: Stress test / RQ5 uncertainty analysis ──────────────────────────
+
+# Clean-image baselines (from test-split run on undegraded images)
+CLEAN_AVG_CONFIDENCE = 0.818
+CLEAN_AVG_F1         = 0.727
+
+DEGRADATION_ORDER = ["heavy_blur", "low_contrast", "heavy_noise", "center_crop", "blank"]
+DEGRADATION_LABELS = {
+    "heavy_blur":   "Heavy\nBlur",
+    "low_contrast": "Low\nContrast",
+    "heavy_noise":  "Heavy\nNoise",
+    "center_crop":  "Center\nCrop",
+    "blank":        "Blank\nImage",
+}
+DEG_COLORS = {
+    "heavy_blur":   "#3498db",
+    "low_contrast": "#9b59b6",
+    "heavy_noise":  "#e67e22",
+    "center_crop":  "#1abc9c",
+    "blank":        "#e74c3c",
+}
+
+
+def fig8_stress_test(results: list[dict], all_results_incl_skipped: list[dict],
+                     out_dir: Path) -> None:
+    """Three-panel figure: confidence, abstention rate, and F1 by degradation type."""
+
+    # Extract degradation from benchmark_id (format: {case_id}_{degradation})
+    def _get_deg(r: dict) -> str:
+        bid = r.get("benchmark_id", "")
+        for deg in DEGRADATION_ORDER:
+            if bid.endswith(deg):
+                return deg
+        return ""
+
+    # Check if this is a stress-test result set
+    degs_found = [_get_deg(r) for r in all_results_incl_skipped]
+    if not any(degs_found):
+        print("  Skipping fig8 — no stress test items found")
+        return
+
+    # Group valid results by degradation
+    deg_results: dict[str, list[dict]] = {d: [] for d in DEGRADATION_ORDER}
+    for r in results:
+        d = _get_deg(r)
+        if d in deg_results:
+            deg_results[d].append(r)
+
+    # Count skipped per degradation (includes valid + skipped)
+    deg_total: dict[str, int] = {d: 0 for d in DEGRADATION_ORDER}
+    deg_skipped: dict[str, int] = {d: 0 for d in DEGRADATION_ORDER}
+    for r in all_results_incl_skipped:
+        d = _get_deg(r)
+        if d in deg_total:
+            deg_total[d] += 1
+            if r.get("skipped", False):
+                deg_skipped[d] += 1
+
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 6))
+
+    x = np.arange(len(DEGRADATION_ORDER))
+    bar_colors = [DEG_COLORS[d] for d in DEGRADATION_ORDER]
+    xlabels = [DEGRADATION_LABELS[d] for d in DEGRADATION_ORDER]
+
+    # ── Panel 1: Confidence by degradation ──
+    confs = []
+    for d in DEGRADATION_ORDER:
+        vals = [r["uncertainty_metrics"]["overall_confidence"]
+                for r in deg_results[d]
+                if r["uncertainty_metrics"]["overall_confidence"] >= 0]
+        confs.append(np.mean(vals) if vals else 0.0)
+
+    bars1 = ax1.bar(x, confs, color=bar_colors, edgecolor="white", width=0.6)
+    ax1.axhline(y=CLEAN_AVG_CONFIDENCE, color="black", linestyle="--", linewidth=1.5,
+                label=f"Clean baseline ({CLEAN_AVG_CONFIDENCE})")
+    for bar, v in zip(bars1, confs):
+        ax1.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01,
+                 f"{v:.2f}", ha="center", va="bottom", fontsize=10, fontweight="bold")
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(xlabels, fontsize=10)
+    ax1.set_ylabel("Average Confidence", fontsize=12)
+    ax1.set_title("Model Confidence", fontsize=13)
+    ax1.set_ylim(0, 1.1)
+    ax1.legend(fontsize=9)
+    ax1.grid(axis="y", alpha=0.3)
+
+    # ── Panel 2: Abstention + skip rate ──
+    abstain_rates = []
+    skip_rates = []
+    for d in DEGRADATION_ORDER:
+        n_total = deg_total[d]
+        n_skip = deg_skipped[d]
+        n_abstain = sum(1 for r in deg_results[d] if r["uncertainty_metrics"]["abstained"])
+        abstain_rates.append(n_abstain / n_total * 100 if n_total > 0 else 0.0)
+        skip_rates.append(n_skip / n_total * 100 if n_total > 0 else 0.0)
+
+    bars2a = ax2.bar(x - 0.15, abstain_rates, 0.3, color=bar_colors, edgecolor="white",
+                     label="Abstained")
+    bars2b = ax2.bar(x + 0.15, skip_rates, 0.3, color=[c + "80" for c in bar_colors],
+                     edgecolor="white", label="Refused / Error", alpha=0.6)
+    for bar, v in zip(bars2a, abstain_rates):
+        ax2.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.5,
+                 f"{v:.0f}%", ha="center", va="bottom", fontsize=10, fontweight="bold")
+    for bar, v in zip(bars2b, skip_rates):
+        if v > 0:
+            ax2.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.5,
+                     f"{v:.0f}%", ha="center", va="bottom", fontsize=9)
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(xlabels, fontsize=10)
+    ax2.set_ylabel("Rate (%)", fontsize=12)
+    ax2.set_title("Abstention & Refusal Rate", fontsize=13)
+    ax2.set_ylim(0, 110)
+    ax2.legend(fontsize=9)
+    ax2.grid(axis="y", alpha=0.3)
+
+    # ── Panel 3: F1 by degradation ──
+    f1s = []
+    for d in DEGRADATION_ORDER:
+        vals = [r["grounding_metrics"]["f1"] for r in deg_results[d]]
+        f1s.append(np.mean(vals) if vals else 0.0)
+
+    bars3 = ax3.bar(x, f1s, color=bar_colors, edgecolor="white", width=0.6)
+    ax3.axhline(y=CLEAN_AVG_F1, color="black", linestyle="--", linewidth=1.5,
+                label=f"Clean baseline ({CLEAN_AVG_F1})")
+    for bar, v in zip(bars3, f1s):
+        ax3.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01,
+                 f"{v:.3f}", ha="center", va="bottom", fontsize=10, fontweight="bold")
+    ax3.set_xticks(x)
+    ax3.set_xticklabels(xlabels, fontsize=10)
+    ax3.set_ylabel("Average F1", fontsize=12)
+    ax3.set_title("Grounding F1", fontsize=13)
+    ax3.set_ylim(0, 1.1)
+    ax3.legend(fontsize=9)
+    ax3.grid(axis="y", alpha=0.3)
+
+    fig.suptitle("RQ5: Uncertainty Calibration on Degraded Inputs\n"
+                 "Model never abstains and maintains high confidence on destroyed images",
+                 fontsize=14, y=1.04)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig8_stress_test_rq5.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print("  Saved fig8_stress_test_rq5.png")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def _backfill_corrected_grounding(results: list[dict]) -> list[dict]:
@@ -505,6 +649,8 @@ def main(results_path: str = None) -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Saving figures to {FIGURES_DIR}/\n")
 
+    all_results = data["results"]  # includes skipped, needed for fig8
+
     fig1_per_type_grounding(results, FIGURES_DIR)
     fig2_mv_vs_sv(results, FIGURES_DIR)
     fig3_confusion_heatmap(results, FIGURES_DIR)
@@ -512,8 +658,9 @@ def main(results_path: str = None) -> None:
     fig5_verdict_distribution(results, agg, FIGURES_DIR)
     fig6_hallucination_table(results, FIGURES_DIR)
     fig7_rq_summary(results, agg, FIGURES_DIR)
+    fig8_stress_test(results, all_results, FIGURES_DIR)
 
-    print(f"\nDone — {7} figures saved to {FIGURES_DIR}/")
+    print(f"\nDone — figures saved to {FIGURES_DIR}/")
 
 
 if __name__ == "__main__":
