@@ -515,6 +515,16 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
     uncertainty   = compute_uncertainty_score(reasoner_output)
     cross_view    = reasoner_output.get("cross_view_consistency") if is_multiview else None
 
+    # Verifier-corrected grounding (RQ6: does verification improve grounding?)
+    corrected_types = verifier_output.get("corrected_findings", {}).get("evidence_types_found", [])
+    if corrected_types:
+        grounding_corrected = compute_grounding_score(
+            {"evidence_types_found": corrected_types},
+            item["gold_evidence_types"],
+        )
+    else:
+        grounding_corrected = grounding  # fallback: same as reasoner
+
     return {
         "benchmark_id":          item["benchmark_id"],
         "case_id":               case_id,
@@ -527,6 +537,7 @@ def evaluate_item(client: OpenAI, item: dict, dry_run: bool = False) -> dict:
         "reasoner_output":       reasoner_output,
         "verifier_output":       verifier_output,
         "grounding_metrics":     grounding,
+        "grounding_corrected_metrics": grounding_corrected,
         "hallucination_metrics": hallucination,
         "uncertainty_metrics":   uncertainty,
         "cross_view_metrics":    cross_view,
@@ -554,6 +565,9 @@ def aggregate_results(results: list[dict]) -> dict:
     precisions  = [r["grounding_metrics"]["precision"]              for r in valid]
     recalls     = [r["grounding_metrics"]["recall"]                 for r in valid]
     f1s         = [r["grounding_metrics"]["f1"]                     for r in valid]
+    precisions_corrected = [r["grounding_corrected_metrics"]["precision"] for r in valid]
+    recalls_corrected    = [r["grounding_corrected_metrics"]["recall"]    for r in valid]
+    f1s_corrected        = [r["grounding_corrected_metrics"]["f1"]        for r in valid]
     hall_rates  = [r["hallucination_metrics"]["hallucination_rate"] for r in valid]
     verdicts    = [r["hallucination_metrics"]["verdict"]            for r in valid]
     abstentions = [r["uncertainty_metrics"]["abstained"]            for r in valid]
@@ -620,11 +634,16 @@ def aggregate_results(results: list[dict]) -> dict:
             "verifier_improved_n": sum(
                 1 for r in valid if r["verifier_output"].get("corrected_findings")
             ),
+            "reasoner_avg_f1":        mean(f1s),
+            "corrected_avg_f1":       mean(f1s_corrected),
+            "f1_improvement":         round(mean(f1s_corrected) - mean(f1s), 4),
+            "corrected_avg_precision": mean(precisions_corrected),
+            "corrected_avg_recall":    mean(recalls_corrected),
         },
     }
 
 
-def main(split: str = "all", dry_run: bool = False) -> None:
+def main(split: str = "all", dry_run: bool = False, benchmark_file: str = None) -> None:
     log.info("=== GPT-4o Forensic Footprint Evaluation ===")
 
     if not OPENAI_API_KEY and not dry_run:
@@ -632,7 +651,9 @@ def main(split: str = "all", dry_run: bool = False) -> None:
 
     client = OpenAI(api_key=OPENAI_API_KEY)
 
-    with open(BENCHMARK_PATH) as f:
+    bench_path = Path(benchmark_file) if benchmark_file else BENCHMARK_PATH
+    log.info("Loading benchmark from %s", bench_path)
+    with open(bench_path) as f:
         benchmark = json.load(f)
 
     items = benchmark["items"]
@@ -685,8 +706,8 @@ def main(split: str = "all", dry_run: bool = False) -> None:
         "timestamp": datetime.now().isoformat() + "Z",
     }
 
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_path = OUTPUT_DIR / f"results_{split}_{ts}.json"
+    tag = "abstention" if benchmark_file else "results"
+    results_path = OUTPUT_DIR / f"{tag}.json"
     with open(results_path, "w") as f:
         json.dump(final, f, indent=2)
 
@@ -696,7 +717,9 @@ def main(split: str = "all", dry_run: bool = False) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--split",   default="all", choices=["all", "train", "val", "test"])
+    parser.add_argument("--split",   default="all", choices=["all", "train", "val", "test", "stress_test"])
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--benchmark", default=None,
+                        help="Path to benchmark JSON (default: data/benchmark_v1.json)")
     args = parser.parse_args()
-    main(args.split, args.dry_run)
+    main(args.split, args.dry_run, args.benchmark)
