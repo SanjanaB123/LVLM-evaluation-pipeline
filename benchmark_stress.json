@@ -1,0 +1,893 @@
+{
+  "version": "1.0-stress",
+  "description": "Stress test benchmark for RQ5 (Uncertainty & Abstention)",
+  "purpose": "Test whether models express calibrated uncertainty on degraded/ambiguous inputs",
+  "n_cases": 5,
+  "n_items": 25,
+  "degradation_types": {
+    "heavy_blur": "Gaussian blur sigma=15, destroying fine pattern detail",
+    "low_contrast": "Contrast reduced to 10%, making patterns nearly invisible",
+    "heavy_noise": "Gaussian noise std=80, obscuring all detail",
+    "center_crop": "Only 15% center region visible, most evidence removed",
+    "blank": "Uniform gray image with no forensic content"
+  },
+  "expected_behaviors": {
+    "heavy_blur": "Lower confidence, more unclear_region labels",
+    "low_contrast": "Should abstain \u2014 patterns not visible",
+    "heavy_noise": "Should abstain \u2014 image too noisy",
+    "center_crop": "Lower confidence, partial evidence only",
+    "blank": "Must abstain \u2014 no forensic content present"
+  },
+  "items": [
+    {
+      "benchmark_id": "00201L_heavy_blur",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_blur",
+      "degradation_description": "Gaussian blur sigma=15, destroying fine pattern detail",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201L/heavy_blur/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201L/01.png",
+      "source_case_id": "00201L"
+    },
+    {
+      "benchmark_id": "00201L_low_contrast",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "low_contrast",
+      "degradation_description": "Contrast reduced to 10%, making patterns nearly invisible",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201L/low_contrast/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201L/01.png",
+      "source_case_id": "00201L"
+    },
+    {
+      "benchmark_id": "00201L_heavy_noise",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_noise",
+      "degradation_description": "Gaussian noise std=80, obscuring all detail",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201L/heavy_noise/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201L/01.png",
+      "source_case_id": "00201L"
+    },
+    {
+      "benchmark_id": "00201L_center_crop",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "center_crop",
+      "degradation_description": "Only 15% center region visible, most evidence removed",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": true,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201L/center_crop/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201L/01.png",
+      "source_case_id": "00201L"
+    },
+    {
+      "benchmark_id": "00201L_blank",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "blank",
+      "degradation_description": "Uniform gray image with no forensic content",
+      "expected_abstain": true,
+      "expected_confidence": "zero",
+      "expected_evidence": [],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201L/blank/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201L/01.png",
+      "source_case_id": "00201L"
+    },
+    {
+      "benchmark_id": "00201R_heavy_blur",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_blur",
+      "degradation_description": "Gaussian blur sigma=15, destroying fine pattern detail",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201R/heavy_blur/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201R/01.png",
+      "source_case_id": "00201R"
+    },
+    {
+      "benchmark_id": "00201R_low_contrast",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "low_contrast",
+      "degradation_description": "Contrast reduced to 10%, making patterns nearly invisible",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201R/low_contrast/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201R/01.png",
+      "source_case_id": "00201R"
+    },
+    {
+      "benchmark_id": "00201R_heavy_noise",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_noise",
+      "degradation_description": "Gaussian noise std=80, obscuring all detail",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201R/heavy_noise/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201R/01.png",
+      "source_case_id": "00201R"
+    },
+    {
+      "benchmark_id": "00201R_center_crop",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "center_crop",
+      "degradation_description": "Only 15% center region visible, most evidence removed",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": true,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201R/center_crop/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201R/01.png",
+      "source_case_id": "00201R"
+    },
+    {
+      "benchmark_id": "00201R_blank",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "blank",
+      "degradation_description": "Uniform gray image with no forensic content",
+      "expected_abstain": true,
+      "expected_confidence": "zero",
+      "expected_evidence": [],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00201R/blank/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00201R/01.png",
+      "source_case_id": "00201R"
+    },
+    {
+      "benchmark_id": "00302R_heavy_blur",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_blur",
+      "degradation_description": "Gaussian blur sigma=15, destroying fine pattern detail",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00302R/heavy_blur/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00302R/01.png",
+      "source_case_id": "00302R"
+    },
+    {
+      "benchmark_id": "00302R_low_contrast",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "low_contrast",
+      "degradation_description": "Contrast reduced to 10%, making patterns nearly invisible",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00302R/low_contrast/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00302R/01.png",
+      "source_case_id": "00302R"
+    },
+    {
+      "benchmark_id": "00302R_heavy_noise",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_noise",
+      "degradation_description": "Gaussian noise std=80, obscuring all detail",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00302R/heavy_noise/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00302R/01.png",
+      "source_case_id": "00302R"
+    },
+    {
+      "benchmark_id": "00302R_center_crop",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "center_crop",
+      "degradation_description": "Only 15% center region visible, most evidence removed",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": true,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00302R/center_crop/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00302R/01.png",
+      "source_case_id": "00302R"
+    },
+    {
+      "benchmark_id": "00302R_blank",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "blank",
+      "degradation_description": "Uniform gray image with no forensic content",
+      "expected_abstain": true,
+      "expected_confidence": "zero",
+      "expected_evidence": [],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00302R/blank/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00302R/01.png",
+      "source_case_id": "00302R"
+    },
+    {
+      "benchmark_id": "00303L_heavy_blur",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_blur",
+      "degradation_description": "Gaussian blur sigma=15, destroying fine pattern detail",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00303L/heavy_blur/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00303L/01.png",
+      "source_case_id": "00303L"
+    },
+    {
+      "benchmark_id": "00303L_low_contrast",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "low_contrast",
+      "degradation_description": "Contrast reduced to 10%, making patterns nearly invisible",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00303L/low_contrast/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00303L/01.png",
+      "source_case_id": "00303L"
+    },
+    {
+      "benchmark_id": "00303L_heavy_noise",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_noise",
+      "degradation_description": "Gaussian noise std=80, obscuring all detail",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00303L/heavy_noise/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00303L/01.png",
+      "source_case_id": "00303L"
+    },
+    {
+      "benchmark_id": "00303L_center_crop",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "center_crop",
+      "degradation_description": "Only 15% center region visible, most evidence removed",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": true,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00303L/center_crop/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00303L/01.png",
+      "source_case_id": "00303L"
+    },
+    {
+      "benchmark_id": "00303L_blank",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "blank",
+      "degradation_description": "Uniform gray image with no forensic content",
+      "expected_abstain": true,
+      "expected_confidence": "zero",
+      "expected_evidence": [],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00303L/blank/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00303L/01.png",
+      "source_case_id": "00303L"
+    },
+    {
+      "benchmark_id": "00504L_heavy_blur",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_blur",
+      "degradation_description": "Gaussian blur sigma=15, destroying fine pattern detail",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00504L/heavy_blur/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00504L/01.png",
+      "source_case_id": "00504L"
+    },
+    {
+      "benchmark_id": "00504L_low_contrast",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "low_contrast",
+      "degradation_description": "Contrast reduced to 10%, making patterns nearly invisible",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00504L/low_contrast/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00504L/01.png",
+      "source_case_id": "00504L"
+    },
+    {
+      "benchmark_id": "00504L_heavy_noise",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "heavy_noise",
+      "degradation_description": "Gaussian noise std=80, obscuring all detail",
+      "expected_abstain": true,
+      "expected_confidence": "very_low",
+      "expected_evidence": [
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00504L/heavy_noise/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00504L/01.png",
+      "source_case_id": "00504L"
+    },
+    {
+      "benchmark_id": "00504L_center_crop",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "center_crop",
+      "degradation_description": "Only 15% center region visible, most evidence removed",
+      "expected_abstain": false,
+      "expected_confidence": "low",
+      "expected_evidence": [
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": true,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00504L/center_crop/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00504L/01.png",
+      "source_case_id": "00504L"
+    },
+    {
+      "benchmark_id": "00504L_blank",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "views": [
+        "01"
+      ],
+      "n_views": 1,
+      "hypothesis_prompt": "Identify and segment the forensic evidence present in this footprint image. Describe what you see and justify your segmentation.",
+      "prompt_type": "footprint_analysis",
+      "degradation": "blank",
+      "degradation_description": "Uniform gray image with no forensic content",
+      "expected_abstain": true,
+      "expected_confidence": "zero",
+      "expected_evidence": [],
+      "gold_evidence_types": [
+        "outer_boundary",
+        "pattern_region",
+        "unclear_region"
+      ],
+      "gold_masks": {},
+      "total_annotations": 0,
+      "ambiguity_flag": true,
+      "has_outer_boundary": false,
+      "has_pattern_region": false,
+      "has_unclear_region": true,
+      "image_paths": [
+        "data/stress_test/images/00504L/blank/01.png"
+      ],
+      "mask_paths": [],
+      "source_image": "data/processed/00504L/01.png",
+      "source_case_id": "00504L"
+    }
+  ]
+}

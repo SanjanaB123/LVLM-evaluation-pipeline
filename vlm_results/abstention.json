@@ -1,0 +1,2681 @@
+{
+  "model": "gpt-4o",
+  "split": "all",
+  "n_items": 25,
+  "aggregate": {
+    "n_evaluated": 21,
+    "n_skipped": 4,
+    "skip_reasons": {
+      "json_parse_error": 4
+    },
+    "rq1_domain_shift": {
+      "failure_modes_encountered": [],
+      "avg_failure_modes_per_item": 0.0
+    },
+    "rq2_multiview": {
+      "multiview_avg_f1": 0.0,
+      "singleview_avg_f1": 0.6286,
+      "improvement": -0.6286,
+      "n_multiview_items": 0,
+      "n_singleview_items": 21
+    },
+    "rq3_grounding": {
+      "avg_precision": 1.0,
+      "avg_recall": 0.4762,
+      "avg_f1": 0.6286
+    },
+    "rq4_hallucination": {
+      "hallucination_rate": 0.0,
+      "n_hallucinated_items": 0,
+      "verdict_distribution": {
+        "supported": 21,
+        "partially_supported": 0,
+        "unsupported": 0,
+        "unverified": 0
+      }
+    },
+    "rq5_uncertainty": {
+      "abstention_rate": 0.0,
+      "avg_confidence": 0.8,
+      "n_abstained": 0
+    },
+    "rq6_verification": {
+      "verifier_improved_n": 21,
+      "reasoner_avg_f1": 0.6286,
+      "corrected_avg_f1": 0.6524,
+      "f1_improvement": 0.0238,
+      "corrected_avg_precision": 1.0,
+      "corrected_avg_recall": 0.5079
+    }
+  },
+  "results": [
+    {
+      "benchmark_id": "00201L_heavy_blur",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "pattern",
+          "unclear_region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The shoe print has a clear outer boundary with a rectangular shape.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Grid-like pattern with rectangular blocks.",
+            "location": "top center",
+            "confidence": 0.8,
+            "forensic_significance": "Distinctive pattern useful for matching specific shoe models."
+          },
+          {
+            "description": "Diagonal lines and smaller blocks.",
+            "location": "bottom right",
+            "confidence": 0.8,
+            "forensic_significance": "Unique design elements that can help identify the shoe brand."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with partial visibility of patterns.",
+            "reason_unclear": "The print is faint and lacks clear definition.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct patterns that are partially clear, with some areas smudged or faint. The clear patterns can be used for forensic matching, while unclear regions may limit full identification."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels in the analysis align with the clarity of the patterns observed in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows a clear grid-like pattern at the top center and diagonal lines with smaller blocks at the bottom right. There is also a smudged area with partial visibility, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:22:37.120357Z"
+    },
+    {
+      "benchmark_id": "00201L_low_contrast",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "pattern",
+          "unclear_region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is visible, forming a clear outline of the shoe's sole.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Grid-like pattern with rectangular shapes.",
+            "location": "top center",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern can be used to identify the shoe model or brand."
+          },
+          {
+            "description": "Honeycomb-like pattern.",
+            "location": "bottom right",
+            "confidence": 0.8,
+            "forensic_significance": "Unique pattern that may help in identifying specific shoe features."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with partial pattern visibility.",
+            "reason_unclear": "The print is faint and lacks clear definition.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print has distinct patterns that are identifiable, but some areas are smudged, reducing clarity. The visible patterns provide valuable forensic information."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear appropriate given the clarity of the patterns and the presence of smudged areas."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The analysis correctly identifies the grid-like and honeycomb patterns, as well as the unclear smudged regions."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:22:52.133790Z"
+    },
+    {
+      "benchmark_id": "00201L_heavy_noise",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is visible with a clear rectangular shape, defined by the ruler.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular and circular tread patterns with varying sizes.",
+            "location": "center to top of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe model or brand."
+          },
+          {
+            "description": "Hexagonal and linear patterns.",
+            "location": "bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "Distinctive patterns that may help in matching the shoe to a specific type."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged and partial impressions.",
+            "reason_unclear": "The print is incomplete and some areas are smudged, making it difficult to discern the exact pattern.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct patterns that are partially clear, allowing for potential identification. However, some regions are smudged or incomplete, which could affect the accuracy of the analysis."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels provided align with the clarity of the patterns and the presence of unclear regions."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned tread",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The analysis correctly identifies the presence of distinct tread patterns and unclear regions due to smudging."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:23:27.488240Z"
+    },
+    {
+      "benchmark_id": "00201L_center_crop",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "linear patterns",
+          "hexagonal patterns",
+          "smudged areas"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is irregular and partially visible, surrounding the pattern regions.",
+          "confidence": 0.8
+        },
+        "pattern_regions": [
+          {
+            "description": "Linear patterns with varying thicknesses",
+            "location": "top and center of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify specific shoe models or brands."
+          },
+          {
+            "description": "Hexagonal patterns",
+            "location": "bottom right of the image",
+            "confidence": 0.9,
+            "forensic_significance": "Hexagonal patterns are distinctive and can help in matching to specific shoe designs."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged areas with unclear details",
+            "reason_unclear": "The details are blurred and lack definition, possibly due to movement or poor contact.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The image shows distinct linear and hexagonal patterns that are typical in shoe prints, providing valuable forensic information. However, some areas are smudged, reducing clarity and confidence in those regions."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear appropriate given the clarity of the patterns."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "linear patterns",
+            "hexagonal patterns",
+            "smudged areas"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct linear and hexagonal patterns, as well as smudged areas, consistent with the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region"
+        ],
+        "predicted_raw": [
+          "linear patterns",
+          "hexagonal patterns",
+          "smudged areas"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region"
+        ],
+        "predicted_raw": [
+          "linear patterns",
+          "hexagonal patterns",
+          "smudged areas"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:23:45.910416Z"
+    },
+    {
+      "benchmark_id": "00201L_blank",
+      "case_id": "00201L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "unclear_region"
+        ],
+        "outer_boundary": {
+          "present": false,
+          "description": "",
+          "confidence": 0.0
+        },
+        "pattern_regions": [],
+        "unclear_regions": [
+          {
+            "description": "The entire image is a solid color with no discernible patterns or features.",
+            "reason_unclear": "The image lacks any visible details or contrast to identify specific regions.",
+            "confidence": 0.9
+          }
+        ],
+        "overall_confidence": 0.9,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": false,
+        "justification": "The image does not contain any visible footprint patterns or features to analyze. It is uniformly colored, indicating no forensic evidence is present."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence level is appropriate given the uniformity of the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "unclear_region"
+          ],
+          "overall_confidence": 0.9,
+          "justification": "The image is uniformly colored with no discernible patterns or features, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.9,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:24:11.872712Z"
+    },
+    {
+      "benchmark_id": "00201R_heavy_blur",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is defined by a series of patterned impressions forming the shape of a shoe print.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Grid-like pattern with rectangular shapes.",
+            "location": "top of the image",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern can be used to identify the specific shoe model or brand."
+          },
+          {
+            "description": "Curved lines and smaller geometric shapes.",
+            "location": "center of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These unique patterns can help in distinguishing between different shoe models."
+          },
+          {
+            "description": "Irregular geometric shapes.",
+            "location": "bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "Distinctive shapes that may be unique to a specific shoe type."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with less defined patterns.",
+            "reason_unclear": "The print is partially faded or smudged, making it difficult to discern specific details.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct patterned regions that are characteristic of specific shoe designs. However, some areas are unclear due to smudging, which affects the overall clarity and detail of the impression."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels provided align with the clarity of the patterns visible in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned tread",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct patterned regions and some unclear areas due to smudging, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:24:28.604440Z"
+    },
+    {
+      "benchmark_id": "00201R_low_contrast",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is visible and follows the general shape of a shoe sole.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Grid-like pattern with rectangular shapes.",
+            "location": "top center",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern can be used to identify the specific shoe model."
+          },
+          {
+            "description": "Triangular and hexagonal patterns with textured details.",
+            "location": "bottom center",
+            "confidence": 0.8,
+            "forensic_significance": "These unique patterns can help differentiate between similar shoe models."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with less distinct pattern.",
+            "reason_unclear": "The print is partially faded or smudged, making the pattern less distinct.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct patterns that are useful for forensic analysis, though some areas are smudged or unclear, affecting the overall clarity."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear appropriate given the clarity of the patterns and the presence of smudged areas."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned tread",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct grid-like and triangular patterns, with some smudged areas affecting clarity."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:24:45.859720Z"
+    },
+    {
+      "benchmark_id": "00201R_heavy_noise",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The print has a clear outer boundary with a distinct shape resembling a shoe sole.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular and circular tread patterns with distinct spacing.",
+            "location": "center and upper part of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe brand or model."
+          },
+          {
+            "description": "Hexagonal and triangular patterns with textured details.",
+            "location": "lower part of the image",
+            "confidence": 0.8,
+            "forensic_significance": "The unique shapes and textures can help in matching the print to a specific shoe."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with less distinct pattern details.",
+            "reason_unclear": "Possible partial impression or surface interference.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The print shows distinct tread patterns that are useful for forensic analysis, although some areas are unclear due to smudging or partial impressions."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels in the analysis align well with the visual evidence."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned tread",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct tread patterns and some unclear regions due to smudging."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:25:29.803730Z"
+    },
+    {
+      "benchmark_id": "00201R_center_crop",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned regions",
+          "textured areas",
+          "unclear regions"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is defined by the edges of the shoe print, showing a clear demarcation of the print's perimeter.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Hexagonal textured pattern",
+            "location": "left and right sides of the image",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern can be used to identify the specific shoe model or brand."
+          },
+          {
+            "description": "Linear and angular shapes",
+            "location": "center and top of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These shapes can help in determining the wear pattern and specific design features of the shoe."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with partial pattern visibility",
+            "reason_unclear": "The pattern is partially obscured, possibly due to movement or surface texture.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The image shows distinct patterned regions that are characteristic of shoe prints, with some areas being unclear due to possible smudging. The clear patterns and boundary provide enough information to support the analysis."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear appropriate given the clarity of the patterns and boundaries."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned regions",
+            "unclear regions"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct hexagonal and linear patterns, with some smudged areas, supporting the analysis."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned regions",
+          "textured areas",
+          "unclear regions"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned regions",
+          "unclear regions"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:25:49.384234Z"
+    },
+    {
+      "benchmark_id": "00201R_blank",
+      "case_id": "00201R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": true,
+      "skip_reason": "No JSON object found: \"I'm unable to view or analyze the image provided. Please ensure the image is visible or provide a description for further assistance.\"",
+      "timestamp": "2026-04-06T13:26:18.908877Z"
+    },
+    {
+      "benchmark_id": "00302R_heavy_blur",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "pattern",
+          "unclear_region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "Rectangular boundary with a yellow dotted line",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Distinct rectangular and oval shapes",
+            "location": "center",
+            "confidence": 0.8,
+            "forensic_significance": "These shapes can be used to identify the shoe model or brand."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged or incomplete areas around the pattern",
+            "reason_unclear": "Partial impression and possible smudging",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The distinct pattern regions provide identifiable features, while unclear regions suggest partial impressions or smudging, affecting the clarity."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear appropriate given the visible evidence."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The distinct pattern regions and unclear regions are consistent with the image."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:26:34.720694Z"
+    },
+    {
+      "benchmark_id": "00302R_low_contrast",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is partially visible with some edges defined.",
+          "confidence": 0.7
+        },
+        "pattern_regions": [
+          {
+            "description": "Horizontal and vertical grooves with rectangular shapes.",
+            "location": "center",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe model or brand."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged areas around the edges of the print.",
+            "reason_unclear": "The print is incomplete and some areas are faint or missing.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.7,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The visible patterns are distinct enough to provide some identification, but the print is incomplete and some areas are unclear, reducing overall confidence."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The analyst's confidence levels appear appropriate given the visibility of the patterns and unclear regions."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "partial shoe print",
+            "unclear region"
+          ],
+          "overall_confidence": 0.7,
+          "justification": "The visible patterns are distinct enough to provide some identification, but the print is incomplete and some areas are unclear, reducing overall confidence."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.7,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:26:48.602881Z"
+    },
+    {
+      "benchmark_id": "00302R_heavy_noise",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The print has a distinct outer boundary with a partial impression visible.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Horizontal linear patterns with oval shapes inside.",
+            "location": "top center",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify specific shoe models."
+          },
+          {
+            "description": "Additional horizontal linear patterns with oval shapes.",
+            "location": "bottom center",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can help in matching the print to a specific shoe."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged areas around the edges of the print.",
+            "reason_unclear": "The print is incomplete and lacks clear definition in some areas.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The print shows distinct patterns that are partially clear, allowing for potential identification. However, some areas are smudged, reducing clarity."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear to be appropriately calibrated given the clarity of the patterns and the presence of smudged areas."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "partial shoe print",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The print shows distinct patterns that are partially clear, allowing for potential identification. However, some areas are smudged, reducing clarity."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "partial shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:27:32.896646Z"
+    },
+    {
+      "benchmark_id": "00302R_center_crop",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is partially visible with clear edges on the top and left sides.",
+          "confidence": 0.8
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular tread patterns with parallel lines.",
+            "location": "top right",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe model or brand."
+          },
+          {
+            "description": "Irregularly shaped tread patterns.",
+            "location": "bottom left",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns may provide additional unique identifiers."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area with partial visibility.",
+            "reason_unclear": "The print is faded and lacks distinct edges.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The image shows distinct tread patterns that can be analyzed for forensic purposes, though some areas are unclear due to smudging."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels provided align with the visible evidence in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern_region",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct tread patterns and some unclear regions due to smudging."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:27:52.322374Z"
+    },
+    {
+      "benchmark_id": "00302R_blank",
+      "case_id": "00302R",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": true,
+      "skip_reason": "No JSON object found: \"I'm unable to view or analyze the image provided. Please ensure the image is correctly uploaded or described.\"",
+      "timestamp": "2026-04-06T13:28:22.694916Z"
+    },
+    {
+      "benchmark_id": "00303L_heavy_blur",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is well-defined with a rectangular shape.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "The top pattern region consists of a series of rectangular blocks arranged in a semi-circular fashion.",
+            "location": "top",
+            "confidence": 0.8,
+            "forensic_significance": "This region can be used to identify specific shoe models due to its distinct pattern."
+          },
+          {
+            "description": "The bottom pattern region features a U-shaped design with rectangular blocks.",
+            "location": "bottom",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern is crucial for matching the shoe print to a specific shoe type."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "The central area between the top and bottom patterns is unclear.",
+            "reason_unclear": "The image is faded or lacks detail in this region.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The distinct patterns at the top and bottom provide valuable forensic information, while the unclear central region does not significantly impact the overall analysis."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels are appropriate given the clarity of the patterns and the unclear region."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "clear pattern",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The distinct patterns at the top and bottom provide valuable forensic information, while the unclear central region does not significantly impact the overall analysis."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:28:40.193419Z"
+    },
+    {
+      "benchmark_id": "00303L_low_contrast",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is well-defined with a clear oval shape around the top and U-shape at the bottom.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "The top region has a series of rectangular and oval shapes forming a distinct pattern.",
+            "location": "top",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern can be used to identify the shoe model and potentially link it to a specific manufacturer."
+          },
+          {
+            "description": "The bottom region features a U-shaped pattern with horizontal lines in the center.",
+            "location": "bottom",
+            "confidence": 0.8,
+            "forensic_significance": "This pattern is crucial for matching the shoe print to a specific shoe."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "The area around the edges of the top pattern is slightly smudged.",
+            "reason_unclear": "The print is partially faded or smudged, making the edges less distinct.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct patterns that are mostly clear, allowing for identification of specific features. However, some areas are slightly smudged, which could affect precise matching."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels provided align well with the clarity of the patterns observed in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "clear pattern",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct patterns with a clear outer boundary and some smudged areas, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "clear pattern",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:28:58.683161Z"
+    },
+    {
+      "benchmark_id": "00303L_heavy_noise",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is well-defined with a clear rectangular shape.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular and oval tread patterns with horizontal lines in the center.",
+            "location": "top and bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "Distinctive tread patterns can be used to identify the shoe model."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Slightly smudged area near the top left of the upper pattern.",
+            "reason_unclear": "The print is partially faded or smudged.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The tread patterns are distinct and mostly clear, allowing for identification. However, there is a small smudged area that reduces overall clarity."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels provided are consistent with the clarity of the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned tread",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The tread patterns are distinct and mostly clear, allowing for identification. However, there is a small smudged area that reduces overall clarity."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned tread",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:29:36.325374Z"
+    },
+    {
+      "benchmark_id": "00303L_center_crop",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned regions",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is defined by a series of rectangular and linear patterns.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular blocks with textured patterns.",
+            "location": "top and bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These regions can be used to identify the shoe model and brand."
+          },
+          {
+            "description": "Linear striped pattern.",
+            "location": "center of the image",
+            "confidence": 0.8,
+            "forensic_significance": "The unique linear pattern can help in matching the shoe print to a specific shoe."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Central area with no visible pattern.",
+            "reason_unclear": "The area is blank, possibly due to incomplete impression or wear.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The image shows distinct patterned regions that are typical of shoe prints, with a central unclear area that may indicate wear or incomplete impression. The patterns are sufficiently clear to provide forensic value."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels align with the clarity of the patterns visible in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern_region",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows distinct patterned regions at the top and bottom, with a central unclear area, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned regions",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:29:57.267629Z"
+    },
+    {
+      "benchmark_id": "00303L_blank",
+      "case_id": "00303L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": true,
+      "skip_reason": "No JSON object found: \"I'm unable to view or analyze the image provided. Please ensure the image is visible or describe its contents for further assistance.\"",
+      "timestamp": "2026-04-06T13:30:28.386003Z"
+    },
+    {
+      "benchmark_id": "00504L_heavy_blur",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned sole",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is well-defined and follows the general shape of a shoe sole.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "The pattern consists of rectangular and circular shapes distributed across the sole.",
+            "location": "center",
+            "confidence": 0.8,
+            "forensic_significance": "The distinct pattern can be used to identify the shoe model or brand."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "There are smudged areas around the edges of the print.",
+            "reason_unclear": "The edges are less distinct due to possible smudging or incomplete impression.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows a clear pattern in the center, which is useful for identification, but the edges are less distinct, indicating possible smudging."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels are appropriate given the clarity of the pattern and the smudging at the edges."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned sole",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows a clear pattern in the center with rectangular and circular shapes, and smudged areas around the edges."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned sole",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned sole",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:30:43.860828Z"
+    },
+    {
+      "benchmark_id": "00504L_low_contrast",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "patterned shoe print",
+          "unclear region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is visible and follows the general shape of a shoe sole.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular and oval patterns are visible, likely representing the tread design.",
+            "location": "center and bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe model or brand."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged areas and partial impressions",
+            "reason_unclear": "The print is faint and some areas are not fully imprinted.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The visible patterns provide enough detail to analyze the shoe tread design, but some areas are unclear due to faint impressions."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels in the analysis match the clarity of the evidence in the image."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "patterned shoe print",
+            "unclear region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The visible patterns and outer boundary provide enough detail to analyze the shoe tread design, but some areas are unclear due to faint impressions."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "patterned shoe print",
+          "unclear region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:30:57.855280Z"
+    },
+    {
+      "benchmark_id": "00504L_heavy_noise",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "clear pattern regions",
+          "unclear regions"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary of the shoe print is mostly visible with a clear outline.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Circular and rectangular patterns are visible in the forefoot and heel areas.",
+            "location": "top and bottom of the image",
+            "confidence": 0.8,
+            "forensic_significance": "These patterns can be used to identify the shoe model and match it to other prints."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged area near the center of the print.",
+            "reason_unclear": "The print is partially faded or smudged, making it difficult to discern the pattern.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The shoe print shows distinct pattern regions that are useful for forensic analysis, although some areas are unclear due to smudging."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels appear to be accurately calibrated based on the visible evidence."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "outer_boundary",
+            "pattern_region",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The analysis is supported by the visible clear pattern regions and the presence of smudged areas."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "clear pattern regions",
+          "unclear regions"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "predicted_raw": [
+          "outer_boundary",
+          "pattern_region",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:31:36.300356Z"
+    },
+    {
+      "benchmark_id": "00504L_center_crop",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": false,
+      "reasoner_output": {
+        "evidence_types_found": [
+          "pattern",
+          "unclear_region"
+        ],
+        "outer_boundary": {
+          "present": true,
+          "description": "The outer boundary is defined by the edges of the shoe print, showing a clear rectangular shape.",
+          "confidence": 0.9
+        },
+        "pattern_regions": [
+          {
+            "description": "Rectangular and oval shapes forming a grid-like pattern.",
+            "location": "top and center of the image",
+            "confidence": 0.8,
+            "forensic_significance": "The pattern can be used to match the shoe print to a specific shoe model."
+          }
+        ],
+        "unclear_regions": [
+          {
+            "description": "Smudged and faded areas with less distinct patterns.",
+            "reason_unclear": "Possible degradation or partial impression of the shoe print.",
+            "confidence": 0.5
+          }
+        ],
+        "overall_confidence": 0.8,
+        "abstain": false,
+        "abstain_reason": "",
+        "failure_modes": [],
+        "hypothesis_supported": true,
+        "justification": "The image shows a distinct pattern that can be analyzed for matching purposes, but some areas are unclear due to smudging or incomplete impressions."
+      },
+      "verifier_output": {
+        "verification_verdict": "supported",
+        "hallucinations_detected": [],
+        "overclaiming_detected": [],
+        "unsupported_regions": [],
+        "missed_evidence": [],
+        "confidence_calibration": {
+          "reasoner_overconfident": false,
+          "reasoner_underconfident": false,
+          "calibration_notes": "The confidence levels in the analysis are appropriate given the clarity of the patterns and the presence of unclear regions."
+        },
+        "corrected_findings": {
+          "evidence_types_found": [
+            "pattern",
+            "unclear_region"
+          ],
+          "overall_confidence": 0.8,
+          "justification": "The image shows a distinct pattern with rectangular and oval shapes, as well as some smudged areas, supporting the analyst's findings."
+        },
+        "verification_confidence": 0.9
+      },
+      "grounding_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "grounding_corrected_metrics": {
+        "predicted": [
+          "pattern_region",
+          "unclear_region"
+        ],
+        "predicted_raw": [
+          "pattern",
+          "unclear_region"
+        ],
+        "gold": [
+          "unclear_region",
+          "outer_boundary",
+          "pattern_region"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8
+      },
+      "hallucination_metrics": {
+        "n_hallucinations": 0,
+        "n_overclaiming": 0,
+        "verdict": "supported",
+        "hallucination_rate": 0.0
+      },
+      "uncertainty_metrics": {
+        "abstained": false,
+        "abstain_reason": "",
+        "overall_confidence": 0.8,
+        "failure_modes": [],
+        "n_failure_modes": 0
+      },
+      "cross_view_metrics": null,
+      "timestamp": "2026-04-06T13:31:56.524422Z"
+    },
+    {
+      "benchmark_id": "00504L_blank",
+      "case_id": "00504L",
+      "split": "stress_test",
+      "prompt_type": "footprint_analysis",
+      "is_multiview": false,
+      "n_views": 1,
+      "ambiguity_flag": true,
+      "skipped": true,
+      "skip_reason": "No JSON object found: \"I'm unable to analyze the image content directly. Please provide a description or another type of input for assistance.\"",
+      "timestamp": "2026-04-06T13:32:26.363437Z"
+    }
+  ],
+  "timestamp": "2026-04-06T13:32:31.395987Z"
+}

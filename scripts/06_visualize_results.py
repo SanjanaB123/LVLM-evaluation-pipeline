@@ -540,8 +540,8 @@ def fig8_stress_test(results: list[dict], all_results_incl_skipped: list[dict],
 
     bars2a = ax2.bar(x - 0.15, abstain_rates, 0.3, color=bar_colors, edgecolor="white",
                      label="Abstained")
-    bars2b = ax2.bar(x + 0.15, skip_rates, 0.3, color=[c + "80" for c in bar_colors],
-                     edgecolor="white", label="Refused / Error", alpha=0.6)
+    bars2b = ax2.bar(x + 0.15, skip_rates, 0.3, color=bar_colors,
+                     edgecolor="white", label="Refused / Error", alpha=0.4)
     for bar, v in zip(bars2a, abstain_rates):
         ax2.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.5,
                  f"{v:.0f}%", ha="center", va="bottom", fontsize=10, fontweight="bold")
@@ -620,7 +620,7 @@ def _backfill_corrected_grounding(results: list[dict]) -> list[dict]:
     return results
 
 
-def main(results_path: str = None) -> None:
+def main(results_path: str = None, output_dir: str = None) -> None:
     path = Path(results_path) if results_path else RESULTS_PATH
     print(f"Loading results from {path}")
     data = load_results(path)
@@ -646,26 +646,32 @@ def main(results_path: str = None) -> None:
 
     print(f"  {len(results)} valid results, {len(data['results']) - len(results)} skipped")
 
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    print(f"Saving figures to {FIGURES_DIR}/\n")
+    fig_dir = Path(output_dir) if output_dir else FIGURES_DIR
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    print(f"Saving figures to {fig_dir}/\n")
 
     all_results = data["results"]  # includes skipped, needed for fig8
 
-    fig1_per_type_grounding(results, FIGURES_DIR)
-    fig2_mv_vs_sv(results, FIGURES_DIR)
-    fig3_confusion_heatmap(results, FIGURES_DIR)
-    fig4_calibration(results, FIGURES_DIR)
-    fig5_verdict_distribution(results, agg, FIGURES_DIR)
-    fig6_hallucination_table(results, FIGURES_DIR)
-    fig7_rq_summary(results, agg, FIGURES_DIR)
-    fig8_stress_test(results, all_results, FIGURES_DIR)
+    fig1_per_type_grounding(results, fig_dir)
+    fig2_mv_vs_sv(results, fig_dir)
+    fig3_confusion_heatmap(results, fig_dir)
+    fig4_calibration(results, fig_dir)
+    fig5_verdict_distribution(results, agg, fig_dir)
+    fig6_hallucination_table(results, fig_dir)
+    fig7_rq_summary(results, agg, fig_dir)
+    try:
+        fig8_stress_test(results, all_results, fig_dir)
+    except Exception as e:
+        print(f"  ERROR in fig8: {e}")
 
-    print(f"\nDone — figures saved to {FIGURES_DIR}/")
+    print(f"\nDone — figures saved to {fig_dir}/")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate evaluation figures")
     parser.add_argument("--results", default=None,
                         help="Path to results JSON (default: vlm_results/results.json)")
+    parser.add_argument("--output-dir", default=None,
+                        help="Directory for figures (default: results/figures)")
     args = parser.parse_args()
-    main(args.results)
+    main(args.results, args.output_dir)
